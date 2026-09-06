@@ -20,8 +20,6 @@ BuildRequires:	cmake(amd_smi)
 BuildRequires:	cmake(rocprofiler-register)
 BuildRequires:	pkgconfig(numa)
 
-ExclusiveArch:	%{x86_64} %{aarch64}
-
 %description
 rocSHMEM is a GPU-initiated OpenSHMEM implementation used by some
 RCCL GIN paths and multi-GPU research codes.
