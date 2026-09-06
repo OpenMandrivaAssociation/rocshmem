@@ -7,7 +7,7 @@ Summary:	OpenSHMEM for HIP/ROCm
 License:	MIT
 Group:		System/Libraries
 URL:		https://github.com/ROCm/rocm-systems
-Source0:	%{rocm_systems_source rocshmem}
+Source0:	https://github.com/ROCm/rocm-systems/releases/download/therock-10.0/rocshmem.tar.gz#/rocshmem-%{version}.tar.gz
 
 BuildRequires:	rocm-rpm-macros
 BuildRequires:	cmake
