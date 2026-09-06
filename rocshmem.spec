@@ -19,6 +19,8 @@ BuildRequires:	rocm-runtime-devel
 BuildRequires:	cmake(amd_smi)
 BuildRequires:	cmake(rocprofiler-register)
 BuildRequires:	pkgconfig(numa)
+BuildRequires:	clang-tools
+BuildRequires:	clang >= %{rocm_llvm_maj_ver}
 
 %description
 rocSHMEM is a GPU-initiated OpenSHMEM implementation used by some
