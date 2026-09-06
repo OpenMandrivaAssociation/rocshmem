@@ -15,6 +15,7 @@ BuildRequires:	ninja
 BuildRequires:	rocm-cmake
 BuildRequires:	hipcc
 BuildRequires:	rocm-hip-devel
+BuildRequires:	cmake(AMDDeviceLibs)
 BuildRequires:	rocm-runtime-devel
 BuildRequires:	cmake(amd_smi)
 BuildRequires:	cmake(rocprofiler-register)
@@ -48,6 +49,7 @@ export CXXFLAGS
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	-DCMAKE_CXX_COMPILER=hipcc \
 	-DCMAKE_HIP_COMPILER=clang++ \
+	-DCMAKE_HIP_FLAGS="--rocm-path=%{_prefix} --rocm-device-lib-path=%{_libdir}/amdgcn/bitcode" \
 	-DCMAKE_HIP_ARCHITECTURES="%{rocm_gpu_targets}" \
 	-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
 	-DBUILD_FUNCTIONAL_TESTS=OFF \
