@@ -47,7 +47,7 @@ export CXXFLAGS
 %cmake %{rocm_cmake_fhs} %{rocm_cmake_gpu_targets} \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	-DCMAKE_CXX_COMPILER=hipcc \
-	-DCMAKE_HIP_COMPILER=hipcc \
+	-DCMAKE_HIP_COMPILER=clang++ \
 	-DCMAKE_HIP_ARCHITECTURES="%{rocm_gpu_targets}" \
 	-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
 	-DBUILD_FUNCTIONAL_TESTS=OFF \
