@@ -37,6 +37,8 @@ Headers and CMake package for rocSHMEM.
 
 %prep
 %autosetup -n rocshmem -p1
+
+%build
 export CXX=hipcc
 export CC=clang
 export HIP_CLANG_PATH=%{_bindir}
@@ -45,6 +47,8 @@ export CXXFLAGS
 %cmake %{rocm_cmake_fhs} %{rocm_cmake_gpu_targets} \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	-DCMAKE_CXX_COMPILER=hipcc \
+	-DCMAKE_HIP_COMPILER=hipcc \
+	-DCMAKE_HIP_ARCHITECTURES="%{rocm_gpu_targets}" \
 	-DCMAKE_CXX_FLAGS="$CXXFLAGS" \
 	-DBUILD_FUNCTIONAL_TESTS=OFF \
 	-DBUILD_UNIT_TESTS=OFF \
@@ -57,8 +61,6 @@ export CXXFLAGS
 	-DROCM_PATH=%{_prefix} \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-G Ninja
-
-%build
 %ninja_build
 
 %install
