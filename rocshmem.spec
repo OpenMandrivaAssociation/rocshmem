@@ -52,6 +52,7 @@ export CXXFLAGS
 	-DUSE_EXTERNAL_MPI=OFF \
 	-DUSE_IPC=ON \
 	-DUSE_RO=OFF \
+	-DEXPLICIT_ROCM_VERSION=%{version} \
 	-DROCM_PATH=%{_prefix} \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
 	-G Ninja
