@@ -17,6 +17,7 @@ BuildRequires:	hipcc
 BuildRequires:	rocm-hip-devel
 BuildRequires:	cmake(AMDDeviceLibs)
 BuildRequires:	rocm-runtime-devel
+BuildRequires:	cmake(rocm-core)
 BuildRequires:	cmake(amd_smi)
 BuildRequires:	cmake(rocprofiler-register)
 BuildRequires:	pkgconfig(numa)
