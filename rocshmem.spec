@@ -52,6 +52,10 @@ export CC=clang
 export HIP_CLANG_PATH=%{_bindir}
 CXXFLAGS=$(printf '%s' "%{optflags}" | sed 's/-mfpmath=sse//g')
 export CXXFLAGS
+# rocshmem_info is a host program, but hip::device still hip-links it.
+# lld --gc-sections (LTO) then drops __start/__stop_llvm_offload_entries.
+LDFLAGS="${LDFLAGS} -Wl,-z,nostart-stop-gc"
+export LDFLAGS
 # gin_anvil_sdma_factory.cpp is always compiled; anvil.cpp is not unless USE_SDMA is on.
 %cmake %{rocm_cmake_fhs} %{rocm_cmake_gpu_targets} \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
