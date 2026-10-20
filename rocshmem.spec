@@ -80,15 +80,18 @@ export LDFLAGS
 
 %install
 %ninja_install -C build
+# %license owns LICENSE.md. The cmake install also copies it under doc.
+rm -f %{buildroot}%{_docdir}/rocshmem/LICENSE.md
+rmdir %{buildroot}%{_docdir}/rocshmem 2>/dev/null || true
 
 %files
 %license LICENSE.md
 %doc README.md CHANGELOG.md
-%{_libdir}/librocshmem.so.*
+# Upstream sets no SOVERSION. The library file is librocshmem.so itself.
+%{_libdir}/librocshmem.so
 %{_bindir}/rocshmem_info
 
 %files devel
 %{_includedir}/rocshmem/
-%{_includedir}/rocshmem.h
-%{_libdir}/librocshmem.so
+%{_includedir}/gin_anvil/
 %{_libdir}/cmake/rocshmem/
