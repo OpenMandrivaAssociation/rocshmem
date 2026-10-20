@@ -11,6 +11,8 @@ Source0:	https://github.com/ROCm/rocm-systems/releases/download/therock-10.1/roc
 # hsakmt's imported interface passes bare -ldrm. clang-linker-wrapper
 # treats that as a device bitcode library.
 Patch0:		0001-hsakmt-host-link.patch
+# No NUMAConfig.cmake in the distro. Bake libnuma instead of find_dependency(NUMA).
+Patch1:		0002-bake-libnuma-into-cmake.patch
 
 BuildRequires:	rocm-rpm-macros
 BuildRequires:	cmake
@@ -39,6 +41,8 @@ Summary:	Development files for %{name}
 Group:		Development/C++
 Requires:	%{name}%{?_isa} = %{version}-%{release}
 Requires:	rocm-hip-devel
+# The exported cmake target points at libnuma.so and numa.h.
+Requires:	pkgconfig(numa)
 
 %description devel
 Headers and CMake package for rocSHMEM.

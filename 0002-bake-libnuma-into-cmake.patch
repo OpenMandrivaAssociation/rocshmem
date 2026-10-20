@@ -1,0 +1,53 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -577,22 +577,21 @@
+     list(APPEND _rocshmem_export_deps PACKAGE rocprofiler-register)
+   endif()
+ 
+-  # ROCm 7.13+ ships NUMAConfig.cmake in rocm_sysdeps so find_dependency(NUMA)
+-  # works cleanly for consumers. On older ROCm, bake the resolved paths into an
+-  # included file since no config-mode NUMA package exists.
+-  # For ROCm >= 7.13 NUMAConfig.cmake ships in rocm_sysdeps alongside the ROCm
+-  # install. Inject a CMAKE_PREFIX_PATH prepend into the generated config using
+-  # the hip package location (stable relative to rocm_sysdeps) so internal
+-  # find_dependency(NUMA) resolves without requiring downstream project awareness.
+-  # For older ROCm, bake the resolved numa::numa target directly.
++  # TheRock ships NUMAConfig.cmake under lib/rocm_sysdeps. A distro libnuma
++  # has no such file. find_dependency(NUMA) would require cmake(NUMA), which
++  # nothing provides, so bake the pkg-config target unless that config exists.
+   set(_rocshmem_numa_include)
+-  if(${ROCM_MAJOR_VERSION} GREATER 7 OR
+-     (${ROCM_MAJOR_VERSION} EQUAL 7 AND ${ROCM_MINOR_VERSION} GREATER_EQUAL 13))
+-    if(USE_GDA OR USE_SDMA)
+-      list(APPEND _rocshmem_export_deps PACKAGE NUMA)
+-    endif()
++  find_file(
++    _rocshmem_numa_config
++    NAMES NUMAConfig.cmake
++    HINTS "${ROCM_PATH}/lib/rocm_sysdeps"
++    PATH_SUFFIXES lib/cmake cmake/NUMA cmake
++    NO_DEFAULT_PATH
++  )
++  if(_rocshmem_numa_config AND (USE_GDA OR USE_SDMA))
++    list(APPEND _rocshmem_export_deps PACKAGE NUMA)
+   elseif(TARGET numa::numa)
+-    # Older ROCm: bake resolved paths so consumers need no FindNUMA.cmake.
++    # Bake resolved paths so consumers need no FindNUMA.cmake.
+     get_target_property(_numa_lib numa::numa IMPORTED_LOCATION)
+     get_target_property(_numa_inc numa::numa INTERFACE_INCLUDE_DIRECTORIES)
+     file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/rocshmem-numa-targets.cmake"
+@@ -620,11 +619,9 @@
+   )
+   unset(_rocshmem_include_arg)
+   unset(_rocshmem_export_deps)
+-  # Patch the generated config to expand CMAKE_PREFIX_PATH with rocm_sysdeps
+-  # before find_dependency(NUMA) so NUMAConfig.cmake is found on ROCm >= 7.13
+-  # without consumers needing to add rocm_sysdeps to their CMAKE_PREFIX_PATH.
+-  if(${ROCM_MAJOR_VERSION} GREATER 7 OR
+-     (${ROCM_MAJOR_VERSION} EQUAL 7 AND ${ROCM_MINOR_VERSION} GREATER_EQUAL 13))
++  # Only when TheRock's NUMAConfig.cmake is present. The baked target above
++  # does not call find_dependency(NUMA).
++  if(_rocshmem_numa_config)
+     set(_config_out "${CMAKE_CURRENT_BINARY_DIR}/rocshmem-config.cmake")
+     file(READ "${_config_out}" _config_content)
+     string(REPLACE
