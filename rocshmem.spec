@@ -20,6 +20,7 @@ BuildRequires:	rocm-runtime-devel
 BuildRequires:	cmake(rocm-core)
 BuildRequires:	cmake(amd_smi)
 BuildRequires:	cmake(rocprofiler-register)
+BuildRequires:	cmake(hsakmt)
 BuildRequires:	pkgconfig(numa)
 BuildRequires:	clang-tools
 BuildRequires:	clang >= %{rocm_llvm_maj_ver}
@@ -46,6 +47,7 @@ export CC=clang
 export HIP_CLANG_PATH=%{_bindir}
 CXXFLAGS=$(printf '%s' "%{optflags}" | sed 's/-mfpmath=sse//g')
 export CXXFLAGS
+# gin_anvil_sdma_factory.cpp is always compiled; anvil.cpp is not unless USE_SDMA is on.
 %cmake %{rocm_cmake_fhs} %{rocm_cmake_gpu_targets} \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	-DCMAKE_CXX_COMPILER=hipcc \
@@ -60,6 +62,7 @@ export CXXFLAGS
 	-DUSE_EXTERNAL_MPI=OFF \
 	-DUSE_IPC=ON \
 	-DUSE_RO=OFF \
+	-DUSE_SDMA=ON \
 	-DEXPLICIT_ROCM_VERSION=%{version} \
 	-DROCM_PATH=%{_prefix} \
 	-DCMAKE_PREFIX_PATH=%{_prefix} \
