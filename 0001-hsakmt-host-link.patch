@@ -1,0 +1,18 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -375,6 +375,15 @@
+     # Strip both and inject the correct search path for libdrm.
+     get_target_property(_hsakmt_iface_libs hsakmt::hsakmt INTERFACE_LINK_LIBRARIES)
+     list(FILTER _hsakmt_iface_libs EXCLUDE REGEX "(/libc\\.so|/__w/)")
++    # clang-linker-wrapper treats a bare -ldrm as a device bitcode library
++    # and looks up libdrm.so, which is only the -devel symlink. -Wl,-l keeps
++    # these on the host link. Longer name first: -ldrm is a prefix of
++    # -ldrm_amdgpu.
++    string(REPLACE "$<LINK_ONLY:-ldrm_amdgpu>" "-Wl,-ldrm_amdgpu" _hsakmt_iface_libs "${_hsakmt_iface_libs}")
++    string(REPLACE "$<LINK_ONLY:-ldrm>" "-Wl,-ldrm" _hsakmt_iface_libs "${_hsakmt_iface_libs}")
++    string(REPLACE "$<LINK_ONLY:pthread>" "-Wl,-lpthread" _hsakmt_iface_libs "${_hsakmt_iface_libs}")
++    string(REPLACE "$<LINK_ONLY:rt>" "-Wl,-lrt" _hsakmt_iface_libs "${_hsakmt_iface_libs}")
++    string(REPLACE "$<LINK_ONLY:dl>" "-Wl,-ldl" _hsakmt_iface_libs "${_hsakmt_iface_libs}")
+     find_library(_DRM_LIB drm HINTS "${ROCM_PATH}/lib/rocm_sysdeps/lib")
+     if(_DRM_LIB)
+       get_filename_component(_drm_dir "${_DRM_LIB}" DIRECTORY)

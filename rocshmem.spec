@@ -8,6 +8,9 @@ License:	MIT
 Group:		System/Libraries
 URL:		https://github.com/ROCm/rocm-systems
 Source0:	https://github.com/ROCm/rocm-systems/releases/download/therock-10.1/rocshmem.tar.gz#/rocshmem-%{version}.tar.gz
+# hsakmt's imported interface passes bare -ldrm. clang-linker-wrapper
+# treats that as a device bitcode library.
+Patch0:		0001-hsakmt-host-link.patch
 
 BuildRequires:	rocm-rpm-macros
 BuildRequires:	cmake
@@ -22,6 +25,8 @@ BuildRequires:	cmake(amd_smi)
 BuildRequires:	cmake(rocprofiler-register)
 BuildRequires:	cmake(hsakmt)
 BuildRequires:	pkgconfig(numa)
+# libdrm.so (the -devel symlink) has to be present for the host link.
+BuildRequires:	pkgconfig(libdrm)
 BuildRequires:	clang-tools
 BuildRequires:	clang >= %{rocm_llvm_maj_ver}
 
