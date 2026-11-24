@@ -1,13 +1,13 @@
-# GPU-side OpenSHMEM. TheRock 10.1.
+# GPU-side OpenSHMEM. TheRock 10.2.
 
 Name:		rocshmem
-Version:	10.1.0
+Version:	10.2.0
 Release:	1
 Summary:	OpenSHMEM for HIP/ROCm
 License:	MIT
 Group:		System/Libraries
 URL:		https://github.com/ROCm/rocm-systems
-Source0:	https://github.com/ROCm/rocm-systems/releases/download/therock-10.1/rocshmem.tar.gz#/rocshmem-%{version}.tar.gz
+Source0:	https://github.com/ROCm/rocm-systems/releases/download/therock-10.2/rocshmem.tar.gz#/rocshmem-%{version}.tar.gz
 # hsakmt's imported interface passes bare -ldrm. clang-linker-wrapper
 # treats that as a device bitcode library.
 Patch0:		0001-hsakmt-host-link.patch
