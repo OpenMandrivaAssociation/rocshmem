@@ -60,7 +60,6 @@ export CXXFLAGS
 # lld --gc-sections (LTO) then drops __start/__stop_llvm_offload_entries.
 LDFLAGS="${LDFLAGS} -Wl,-z,nostart-stop-gc"
 export LDFLAGS
-# gin_anvil_sdma_factory.cpp is always compiled; anvil.cpp is not unless USE_SDMA is on.
 %cmake %{rocm_cmake_fhs} %{rocm_cmake_gpu_targets} \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	-DCMAKE_CXX_COMPILER=hipcc \
@@ -97,5 +96,4 @@ rmdir %{buildroot}%{_docdir}/rocshmem 2>/dev/null || true
 
 %files devel
 %{_includedir}/rocshmem/
-%{_includedir}/gin_anvil/
 %{_libdir}/cmake/rocshmem/
